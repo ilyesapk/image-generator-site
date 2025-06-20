@@ -5,8 +5,8 @@
   <title>مولد الصور بالذكاء الاصطناعي</title>
 </head>
 <body>
-  <h2>🎨 اكتب وصفًا لنولّد صورة</h2>
-  <input type="text" id="prompt" placeholder="مثال: قطة على القمر" style="width: 300px;">
+  <h2>🎨 اكتب وصفًا وسنولّد لك صورة!</h2>
+  <input type="text" id="prompt" placeholder="مثال: قطة تطير فوق القمر" style="width: 300px;">
   <button onclick="generate()">توليد</button>
   <div id="output" style="margin-top: 20px;"></div>
 
@@ -19,7 +19,7 @@
       const prediction = await fetch("https://api.replicate.com/v1/predictions", {
         method: "POST",
         headers: {
-          "Authorization": "Token r8_2Q3wKFz0Ox6WNQuJUuuy9XxXuVWt7kG1OjEW7",  // ← مفتاحك الحالي
+          "Authorization": "Token r8_GCODKQpJsRelU1ih13ZFyMFcYt3ubnb1Sjp8p",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -35,7 +35,7 @@
         if (data.status === "succeeded") {
           imageURL = data.output[0];
         } else if (data.status === "failed") {
-          output.innerHTML = "❌ فشل التوليد.";
+          output.innerHTML = "❌ فشل في التوليد.";
           return;
         } else {
           await new Promise(resolve => setTimeout(resolve, 2000));
@@ -47,3 +47,4 @@
   </script>
 </body>
 </html>
+🔄 تحديث المفتاح وواجهة التوليد
