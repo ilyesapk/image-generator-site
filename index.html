@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>مولد الصور بالذكاء الاصطناعي</title>
+</head>
+<body>
+  <h2>🎨 اكتب وصفًا لنولّد صورة</h2>
+  <input type="text" id="prompt" placeholder="مثال: قطة على القمر" style="width: 300px;">
+  <button onclick="generate()">توليد</button>
+  <div id="output" style="margin-top: 20px;"></div>
+
+  <script>
+    async function generate() {
+      const prompt = document.getElementById("prompt").value;
+      const output = document.getElementById("output");
+      output.innerHTML = "⏳ جاري التوليد...";
+
+      const prediction = await fetch("https://api.replicate.com/v1/predictions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Token r8_2Q3wKFz0Ox6WNQuJUuuy9XxXuVWt7kG1OjEW7",  // ← مفتاحك الحالي
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          version: "a9758cbf4e529b861251ccfc24499300062ef9d3cfc8b1cf02b5182c3c0d60ae",
+          input: { prompt: prompt }
+        })
+      }).then(res => res.json());
+
+      let imageURL = null;
+      while (!imageURL) {
+        const res = await fetch(prediction.urls.get);
+        const data = await res.json();
+        if (data.status === "succeeded") {
+          imageURL = data.output[0];
+        } else if (data.status === "failed") {
+          output.innerHTML = "❌ فشل التوليد.";
+          return;
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+
+      output.innerHTML = `<img src="${imageURL}" width="512">`;
+    }
+  </script>
+</body>
+</html>
